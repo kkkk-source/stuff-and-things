@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMovementDto } from './dto/create-movement.dto';
-import { UpdateMovementDto } from './dto/update-movement.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Movement } from './entities/movement.entity';
 
 @Injectable()
 export class MovementsService {
-  create(createMovementDto: CreateMovementDto) {
-    return 'This action adds a new movement';
+  constructor(
+    @InjectRepository(Movement)
+    private movementRepository: Repository<Movement>,
+  ) {}
+
+  async create(createMovement: Movement, stuffId: number): Promise<Movement> {
+    return await this.movementRepository.save({
+      ...createMovement,
+      stuffId,
+    });
   }
 
-  findAll() {
-    return `This action returns all movements`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} movement`;
-  }
-
-  update(id: number, updateMovementDto: UpdateMovementDto) {
-    return `This action updates a #${id} movement`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} movement`;
+  async findAllByStuffId(stuffId: number): Promise<Movement[]> {
+    return await this.movementRepository.find({
+      where: { stuffId },
+    });
   }
 }

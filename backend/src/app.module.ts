@@ -6,11 +6,7 @@ import { StuffsModule } from './stuffs/stuffs.module';
 import { MovementsModule } from './movements/movements.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(),
-    StuffsModule,
-    MovementsModule,
-  ],
+  imports: [TypeOrmModule.forRoot(), StuffsModule, MovementsModule],
   controllers: [AppController],
   providers: [AppService],
 })

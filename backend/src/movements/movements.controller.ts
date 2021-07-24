@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  NotFoundException,
+} from '@nestjs/common';
 import { MovementsService } from './movements.service';
+import { StuffsService } from '../stuffs/stuffs.service';
+import { Movement } from './entities/movement.entity';
 import { CreateMovementDto } from './dto/create-movement.dto';
-import { UpdateMovementDto } from './dto/update-movement.dto';
 
-@Controller('movements')
+@Controller('api/v1/stuffs')
 export class MovementsController {
-  constructor(private readonly movementsService: MovementsService) {}
+  constructor(
+    private readonly movementsService: MovementsService,
+    private readonly stuffsService: StuffsService,
+  ) {}
 
-  @Post()
-  create(@Body() createMovementDto: CreateMovementDto) {
-    return this.movementsService.create(createMovementDto);
+  @Post(':id/movements')
+  async create(
+    @Param('id') stuffId: number,
+    @Body() createMovementDto: CreateMovementDto,
+  ): Promise<Movement> {
+    if (!(await this.stuffsService.findOne(stuffId))) {
+      throw new NotFoundException();
+    }
+
+    return await this.movementsService.create(
+      createMovementDto as Movement,
+      stuffId,
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.movementsService.findAll();
-  }
+  @Get(':id/movements')
+  async findAllByStuffId(@Param('id') stuffId: number): Promise<Movement[]> {
+    if (!(await this.stuffsService.findOne(stuffId))) {
+      throw new NotFoundException();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.movementsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMovementDto: UpdateMovementDto) {
-    return this.movementsService.update(+id, updateMovementDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.movementsService.remove(+id);
+    return await this.movementsService.findAllByStuffId(stuffId);
   }
 }
