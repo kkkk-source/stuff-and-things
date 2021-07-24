@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { StuffsService } from './stuffs.service';
+import { Stuff } from './entities/stuff.entity';
 import { CreateStuffDto } from './dto/create-stuff.dto';
 import { UpdateStuffDto } from './dto/update-stuff.dto';
 
-@Controller('stuffs')
+@Controller('api/v1/stuffs')
 export class StuffsController {
   constructor(private readonly stuffsService: StuffsService) {}
 
   @Post()
-  create(@Body() createStuffDto: CreateStuffDto) {
-    return this.stuffsService.create(createStuffDto);
+  async create(@Body() createStuffDto: CreateStuffDto): Promise<Stuff> {
+    return await this.stuffsService.create(createStuffDto as Stuff);
   }
 
   @Get()
-  findAll() {
-    return this.stuffsService.findAll();
+  async findAll(): Promise<Stuff[]> {
+    return await this.stuffsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.stuffsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Stuff> {
+    return await this.stuffsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStuffDto: UpdateStuffDto) {
-    return this.stuffsService.update(+id, updateStuffDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateStuffDto: UpdateStuffDto,
+  ): Promise<Stuff> {
+    return await this.stuffsService.update(+id, updateStuffDto as Stuff);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stuffsService.remove(+id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.stuffsService.remove(+id);
   }
 }
