@@ -11,7 +11,6 @@ export class StuffsService {
   ) {}
 
   async create(createStuff: Stuff): Promise<Stuff> {
-    console.log(createStuff);
     return await this.stuffRepository.save(createStuff);
   }
 
