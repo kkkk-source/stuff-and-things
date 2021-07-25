@@ -37,10 +37,6 @@ export class MovementsController {
 
   @Get(':id/movements')
   async findAllByStuffId(@Param('id') stuffId: number): Promise<Movement[]> {
-    if (!(await this.stuffsService.findOne(stuffId))) {
-      throw new NotFoundException();
-    }
-
     return await this.movementsService.findAllByStuffId(stuffId);
   }
 }
