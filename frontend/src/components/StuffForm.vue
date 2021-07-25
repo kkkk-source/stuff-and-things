@@ -22,11 +22,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import StuffDataService from '@/services/StuffDataService'
 import { CreateStuff } from '@/types/Stuff'
 
 @Component
 export default class StuffForm extends Vue {
-  private stuff: CreateStuff = { name: '', state: 'new' }
+  private stuff: CreateStuff = { name: '', state: 'new', quantity: 0 }
 
   private submit (): void {
     if (!this.stuff.name) {
@@ -37,9 +38,12 @@ export default class StuffForm extends Vue {
       alert('field State required')
       return
     }
-    console.log(this.stuff)
-    console.log(this.stuff.name)
-    console.log(this.stuff.state)
+    StuffDataService.create(this.stuff)
+      .then((response) => {
+        console.log(response.data)
+      }).catch((e) => {
+        console.log(e)
+      })
   }
 }
 </script>
