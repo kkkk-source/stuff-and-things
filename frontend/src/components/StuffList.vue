@@ -27,13 +27,13 @@
         <td>
           <div>
             <span v-on:click="deleteStuff(stuff.id, i)">
-              d
+              &#128163;
             </span>
             <span>
-              m
+              &#128184;
             </span>
             <span v-on:click="selectStuff(i)">
-              s
+              &#128204;
             </span>
           </div>
         </td>
