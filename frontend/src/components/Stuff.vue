@@ -1,7 +1,7 @@
 <template>
   <div>
-    <StuffForm v-on:add-and-reset-stuff="addAndResetStuff" v-bind:stuff="stuff" />
-    <StuffList v-on:delete-stuff="deleteStuff" v-on:select-stuff="stuffSelected" v-bind:stuffs="stuffs" />
+    <StuffForm v-on:reset-stuff="resetStuff" v-on:add-and-reset-stuff="addAndResetStuff" v-bind:stuff="stuff" v-bind:index="index" />
+    <StuffList v-on:delete-stuff="deleteStuff" v-on:select-stuff="selectStuff" v-bind:stuffs="stuffs" />
   </div>
 </template>
 
@@ -19,26 +19,41 @@ import { CreateStuff } from '@/types/Stuff'
   }
 })
 export default class Home extends Vue {
+  private index = -1
   private stuff: CreateStuff = { name: '', state: 'new', quantity: 0 }
   private stuffs: CreateStuff[] = []
 
-  stuffSelected (stuff: CreateStuff): void {
-    this.stuff = stuff
+  selectStuff ({ stuff, index }: { stuff: CreateStuff, index: number }): void {
+    this.stuff = { ...stuff }
+    this.index = index
   }
 
-  addAndResetStuff (): void {
-    this.stuffs.push({ ...this.stuff })
+  resetStuff (): void {
+    this.stuff = { name: '', state: 'new', quantity: 0 }
+    this.index = -1
+  }
+
+  addAndResetStuff (stuff: CreateStuff): void {
+    // the current stuff already exists, so we are editing it
+    if (this.index >= 0) {
+      this.$set(this.stuffs, this.index, stuff)
+      this.stuff = { name: '', state: 'new', quantity: 0 }
+      this.index = -1
+      console.log(this.stuffs)
+      return
+    }
+
+    this.stuffs.push({ ...stuff })
     this.stuff = { name: '', state: 'new', quantity: 0 }
   }
 
-  deleteStuff ({ id, index }): void {
+  deleteStuff ({ id, index }:{ id: number, index: number }): void {
     StuffDataService.delete(id)
       .then((response) => {
         this.stuffs.splice(index, 1)
         console.log(response)
       })
       .catch((e) => {
-        console.log('could not delete ' + id)
         console.log(e)
       })
   }
@@ -57,4 +72,7 @@ export default class Home extends Vue {
 </script>
 
 <style scoped lang="scss">
+div {
+  width: 100%;
+}
 </style>

@@ -16,6 +16,7 @@
     </div>
 
     <button type="submit">Save</button>
+    <button v-on:click.prevent="cancel">Cancel</button>
 
   </form>
 </template>
@@ -28,6 +29,7 @@ import { CreateStuff } from '@/types/Stuff'
 @Component
 export default class StuffForm extends Vue {
   @Prop() private stuff!: CreateStuff
+  @Prop() private index!: number
 
   private submit (): void {
     if (!this.stuff.name) {
@@ -40,11 +42,14 @@ export default class StuffForm extends Vue {
     }
     StuffDataService.create(this.stuff)
       .then((response) => {
-        console.log(response.data)
-        this.$emit('add-and-reset-stuff')
+        this.$emit('add-and-reset-stuff', response.data)
       }).catch((e) => {
         console.log(e)
       })
+  }
+
+  private cancel (): void {
+    this.$emit('reset-stuff')
   }
 }
 </script>
@@ -58,7 +63,7 @@ form {
   width: 100%;
   height: auto;
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 2fr 2fr .5fr .5fr;
   grid-gap: 10px;
   margin-bottom: 15px;
 }

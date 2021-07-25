@@ -45,14 +45,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Stuff } from '@/types/Stuff'
+import { CreateStuff } from '@/types/Stuff'
 
 @Component
 export default class StuffList extends Vue {
-  @Prop() private stuffs: Stuff[]
+  @Prop() private stuffs!: CreateStuff[]
 
   selectStuff (index: number): void {
-    this.$emit('select-stuff', { ...this.stuffs[index] })
+    this.$emit('select-stuff', { stuff: this.stuffs[index], index })
   }
 
   deleteStuff (id: number, index: number): void {
