@@ -21,13 +21,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import StuffDataService from '@/services/StuffDataService'
 import { CreateStuff } from '@/types/Stuff'
 
 @Component
 export default class StuffForm extends Vue {
-  private stuff: CreateStuff = { name: '', state: 'new', quantity: 0 }
+  @Prop() private stuff!: CreateStuff
 
   private submit (): void {
     if (!this.stuff.name) {
@@ -41,6 +41,7 @@ export default class StuffForm extends Vue {
     StuffDataService.create(this.stuff)
       .then((response) => {
         console.log(response.data)
+        this.$emit('add-and-reset-stuff')
       }).catch((e) => {
         console.log(e)
       })
@@ -55,14 +56,15 @@ export default class StuffForm extends Vue {
 
 form {
   width: 100%;
-  height: 50px;
+  height: auto;
   display: grid;
-  grid-template-columns: 1fr 1fr .5fr;
+  grid-template-columns: 2fr 2fr 1fr;
+  grid-gap: 10px;
+  margin-bottom: 15px;
 }
 
 div {
   width: 100%;
-  padding: 0 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -71,6 +73,7 @@ div {
 
 button {
   align-self: flex-end;
+  font-weight: bold;
   background-color: black;
   color: white;
 }

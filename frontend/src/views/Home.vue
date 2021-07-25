@@ -1,16 +1,16 @@
 <template>
   <div class="home">
-    <StuffForm />
+    <Stuff />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import StuffForm from '@/components/StuffForm.vue' // @ is an alias to /src
+import Stuff from '@/components/Stuff.vue'
 
 @Component({
   components: {
-    StuffForm
+    Stuff
   }
 })
 export default class Home extends Vue {}

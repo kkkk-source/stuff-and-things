@@ -9,6 +9,10 @@ class StuffDataService {
   create (data: CreateStuff) {
     return http.post('/stuffs', data)
   }
+
+  delete (id: number) {
+    return http.delete(`/stuffs/${id}`)
+  }
 }
 
 export default new StuffDataService()
