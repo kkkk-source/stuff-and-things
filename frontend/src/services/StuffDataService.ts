@@ -6,6 +6,10 @@ class StuffDataService {
     return http.get('/stuffs')
   }
 
+  get (id: number) {
+    return http.get(`/stuffs/${id}`)
+  }
+
   create (data: CreateStuff) {
     return http.post('/stuffs', data)
   }

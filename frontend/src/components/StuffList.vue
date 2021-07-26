@@ -30,7 +30,7 @@
               &#128163;
             </span>
             <span>
-              &#128184;
+              <router-link v-bind:to="{ name: 'Movements', params: { id: stuff.id }}">&#128184;</router-link>
             </span>
             <span v-on:click="selectStuff(i)">
               &#128204;
@@ -64,6 +64,10 @@ export default class StuffList extends Vue {
 <style scoped lang="scss">
 * {
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
 }
 
 table {
