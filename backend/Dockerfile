@@ -1,19 +1,19 @@
-from node:10 as builder
+FROM node:10 AS builder
 
-workdir /app
+WORKDIR /app
 
-copy package*.json ./
+COPY package*.json ./
 
-run npm install
+RUN npm install
 
-copy . .
+COPY . .
 
-run npm run build
+RUN npm run build
 
-from node:10-alpine
+FROM node:10-alpine
 
-workdir /app
+WORKDIR /app
 
-copy --from=builder /app ./
+COPY --from=builder /app ./
 
-cmd ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"]
