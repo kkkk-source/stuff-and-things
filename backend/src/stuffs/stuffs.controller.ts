@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { StuffsService } from './stuffs.service';
 import { Stuff } from './entities/stuff.entity';
@@ -28,7 +29,12 @@ export class StuffsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Stuff> {
-    return await this.stuffsService.findOne(+id);
+    const stuff = await this.stuffsService.findOne(+id);
+    if (!stuff) {
+	    throw new NotFoundException();
+    }
+
+    return stuff;
   }
 
   @Patch(':id')
