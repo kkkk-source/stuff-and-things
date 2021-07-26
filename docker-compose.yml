@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - darenonet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - darenonet
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=test
+    ports:
+      - "3306:3306"
+    networks:
+      - darenonet
+
+networks:
+  darenonet:
+    driver: bridge
