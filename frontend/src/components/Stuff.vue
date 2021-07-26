@@ -39,7 +39,6 @@ export default class Home extends Vue {
       this.$set(this.stuffs, this.index, stuff)
       this.stuff = { name: '', state: 'new', quantity: 0 }
       this.index = -1
-      console.log(this.stuffs)
       return
     }
 
@@ -49,9 +48,8 @@ export default class Home extends Vue {
 
   deleteStuff ({ id, index }:{ id: number, index: number }): void {
     StuffDataService.delete(id)
-      .then((response) => {
+      .then(() => {
         this.stuffs.splice(index, 1)
-        console.log(response)
       })
       .catch((e) => {
         console.log(e)
@@ -62,7 +60,6 @@ export default class Home extends Vue {
     StuffDataService.getAll()
       .then((response) => {
         this.stuffs = response.data
-        console.log(response.data)
       })
       .catch((e) => {
         console.log(e)

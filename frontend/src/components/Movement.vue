@@ -29,15 +29,23 @@ export default class Movement extends Vue {
 
   createMovement (movement: CreateMovement): void {
     this.stuff.quantity = movement.quantity
-    if (movement.quantity >= this.movements[this.movements.length - 1].quantity) {
+    if (this.movements.length === 0 && movement.quantity === 0) {
+      return
+    }
+
+    if (this.movements.length !== 0 && movement.quantity === this.movements[this.movements.length - 1].quantity) {
+      return
+    }
+
+    if (this.movements.length !== 0 && movement.quantity > this.movements[this.movements.length - 1].quantity) {
       movement.type = 'entry'
     } else {
       movement.type = 'egress'
     }
     MovementDataService.create(this.id, movement)
       .then((response) => {
-        console.log(response.data)
         this.movements.push(response.data)
+        this.movement = { type: 'entry', description: '', quantity: this.movement.quantity }
       })
       .catch((e) => {
         console.log(e)
@@ -45,9 +53,11 @@ export default class Movement extends Vue {
   }
 
   created (): void {
+    this.movement = { type: 'entry', description: '', quantity: this.movement.quantity }
     StuffDataService.get(this.id)
       .then((response) => {
         this.stuff = response.data
+        this.movement.quantity = this.stuff.quantity
       })
       .catch((e) => {
         console.log(e)
@@ -55,7 +65,6 @@ export default class Movement extends Vue {
       })
     MovementDataService.getAll(this.id)
       .then((response) => {
-        console.log(response.data)
         this.movements = response.data
         if (this.movements.length) {
           this.stuff.quantity = this.movements[this.movements.length - 1].quantity
