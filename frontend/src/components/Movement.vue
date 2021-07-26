@@ -37,7 +37,7 @@ export default class Movement extends Vue {
       return
     }
 
-    if (this.movements.length !== 0 && movement.quantity > this.movements[this.movements.length - 1].quantity) {
+    if (this.movements.length !== 0 && +movement.quantity >= +this.movements[this.movements.length - 1].quantity) {
       movement.type = 'entry'
     } else {
       movement.type = 'egress'
