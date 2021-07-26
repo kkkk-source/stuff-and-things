@@ -31,7 +31,7 @@ export class StuffsController {
   async findOne(@Param('id') id: string): Promise<Stuff> {
     const stuff = await this.stuffsService.findOne(+id);
     if (!stuff) {
-	    throw new NotFoundException();
+      throw new NotFoundException();
     }
 
     return stuff;
